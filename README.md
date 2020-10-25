@@ -36,6 +36,15 @@ int count(TreeNodePtr p, Categ cat);
 
 which recursively counts nodes of a given category. (The details depend on your implementation of the tree.)
 
+It is suggested that you also include in `tree.h` all declarations describing the nodes of your tree; they will be necessary in the next task (code generation from trees).
+
+You should also implement an auxiliary function to dump the contents of a node and recursively of its subtrees. Such a function can be very useful in debugging your code, but will not be called by the test program. The header of this function could be, for instance:
+```
+ void dumpTree(TreeNodePtr p, int indent);
+```
+
+where `p` is a pointer to the node (root of a tree) and `indent` is the amount of indentation for this node — it should be increased in recursive calls for subtrees in order to improve readability.
+
 The submission will be processed by the following sequence of Linux commands:
 ```
 bison -d -o parser.c parser.y
