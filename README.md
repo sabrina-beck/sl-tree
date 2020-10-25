@@ -58,3 +58,15 @@ There are three sets of test files. Tests 00 to 27 cover the minimal part of SL 
 * The `all.zip` file mentioned had the files contained in the directory `tests` and the files `src/test_tree.h` and `test_tree.c`.
 * This syntax tree is based on the scanner implemented previously. The scanner project can be found on [sl-scanner](https://github.com/sabrina-beck/sl-scanner)
 * This syntax tree is also based on the parser implemented previously. The parser project can be found on [sl-parser](https://github.com/sabrina-beck/sl-parser)
+
+## Project Execution
+
+In order to run the program use the following command:
+```
+make run
+```
+
+In order to run the tests use:
+```
+make test
+```
