@@ -88,9 +88,11 @@ expression_parameter        : VAR identifier_list COLON IDENTIFIER
                             | identifier_list COLON IDENTIFIER
                             ;
 function_parameter          : function_header
+                            ;
 
 
 block                       : labels_section types_section variables_section functions_section body
+                            ;
 
 labels_section              :
                             | labels

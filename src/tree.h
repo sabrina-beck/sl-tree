@@ -1,4 +1,6 @@
 
+#define MAX_CHILD_NODES 3
+
 typedef enum {
     FUNCTION = 1,
     BLOCK,
@@ -9,6 +11,7 @@ typedef enum {
 
     ASSIGNMENT,
     WHILE,
+    IF_ELSE,
 
     FUNCTION_CALL,
     IDENTIFIER,
@@ -19,9 +22,9 @@ typedef enum {
 
 typedef struct _treeNode {
     NodeCategory category;
-    struct _treeNode *next;
-    struct _treeNode *subtrees;
     char *name;
+    struct _treeNode *next;
+    struct _treeNode *subtrees[MAX_CHILD_NODES];
 } TreeNode, *TreeNodePtr;
 
 void *getTree();  // returns any pointer
