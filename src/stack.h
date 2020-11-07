@@ -8,6 +8,6 @@ typedef struct _stack {
     int size ;
 } Stack;
 
-Stack newStack();
-void push(Stack stack, void* data);
-void* pop(Stack stack);
+Stack* newStack();
+void push(Stack* stack, void* data);
+void* pop(Stack* stack);

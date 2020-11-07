@@ -1,8 +1,12 @@
 %{
 
+#include "tree.h"
+#include<stdio.h>
+
 /* FLEX functions */
 extern int yylex (void);
 void yyerror(char *);
+char *tokenValue;
 
 %}
 
@@ -68,91 +72,97 @@ void yyerror(char *);
 program                     : function END_OF_FILE {return 0;}
                             ;
 
-function                    : function_header block
+function                    : function_header block { addFunction(); }
                             ;
 
 
-function_header             : IDENTIFIER IDENTIFIER formal_parameters
-                            | VOID IDENTIFIER formal_parameters
+function_header             : function_return_type identifier formal_parameters { addFunctionHeader(); }
                             ;
-formal_parameters           : OPEN_PAREN CLOSE_PAREN
+function_return_type        : VOID { addEmpty(); }
+                            | identifier
+                            ;
+formal_parameters           : OPEN_PAREN CLOSE_PAREN { addEmpty(); }
                             | OPEN_PAREN formal_parameter_list CLOSE_PAREN
                             ;
 formal_parameter_list       : formal_parameter
-                            | formal_parameter COMMA formal_parameter_list
+                            | formal_parameter COMMA formal_parameter_list { addSequence(); }
                             ;
 formal_parameter            : expression_parameter
                             | function_parameter
                             ;
-expression_parameter        : VAR identifier_list COLON IDENTIFIER
-                            | identifier_list COLON IDENTIFIER
+expression_parameter        : VAR identifier_list COLON identifier { addExpressionParameter(); }
+                            | identifier_list COLON identifier { addExpressionParameter(); }
                             ;
 function_parameter          : function_header
                             ;
 
 
-block                       : labels_section types_section variables_section functions_section body
+block                       : labels_section types_section variables_section functions_section body { addBlock(); }
                             ;
 
-labels_section              :
+labels_section              : { addEmpty(); }
                             | labels
                             ;
 labels                      : LABELS identifier_list SEMI_COLON
                             ;
 
-types_section               :
+types_section               : { addEmpty(); }
                             | types
                             ;
 types                       : TYPES type_declaration_list
                             ;
 type_declaration_list       : type_declaration
-                            | type_declaration type_declaration_list
+                            | type_declaration type_declaration_list { addSequence(); }
                             ;
-type_declaration            : IDENTIFIER ASSIGN type SEMI_COLON
+type_declaration            : identifier ASSIGN type SEMI_COLON { addTypeDeclaration(); }
                             ;
 
-variables_section           :
+variables_section           : { addEmpty(); }
                             | variables
                             ;
 variables                   : VARS declarations_list
                             ;
 declarations_list           : declaration SEMI_COLON
-                            | declaration SEMI_COLON declarations_list
+                            | declaration SEMI_COLON declarations_list { addSequence(); }
                             ;
-declaration                 : identifier_list COLON type
+declaration                 : identifier_list COLON type { addDeclaration(); }
                             ;
 
-functions_section           :
+functions_section           : { addEmpty(); }
                             | functions
                             ;
 functions                   : FUNCTIONS functions_list
                             ;
 functions_list              : function
-                            | function functions_list
+                            | function functions_list { addSequence(); }
                             ;
 
 
-identifier_list             : IDENTIFIER
-                            | IDENTIFIER COMMA identifier_list
+identifier_list             : identifier
+                            | identifier COMMA identifier_list { addSequence(); }
+                            ;
+identifier                  : IDENTIFIER { addIdentifier(tokenValue); }
                             ;
 
 
-type                        : IDENTIFIER array_size_declaration_list
+type                        : identifier array_size_declaration_list { addType(); }
                             ;
-array_size_declaration_list :
-                            | array_size_declaration array_size_declaration_list
+array_size_declaration_list : { addEmpty(); }
+                            | array_size_declaration array_size_declaration_list { addSequence(); }
                             ;
-array_size_declaration      : OPEN_BRACKET INTEGER CLOSE_BRACKET
+array_size_declaration      : OPEN_BRACKET integer CLOSE_BRACKET
                             ;
 
 
 body                        : OPEN_BRACE statement_list CLOSE_BRACE
                             ;
-statement_list              :
-                            | statement statement_list
+statement_list              : { addEmpty(); }
+                            | statement statement_list { addSequence(); }
                             ;
-statement                   : IDENTIFIER COLON unlabeled_statement
-                            | unlabeled_statement
+statement                   : label unlabeled_statement { addStatement(); }
+                            | unlabeled_statement { addUnlabeledStatement(); }
+                            ;
+label                       : identifier COLON { addLabel(); }
                             ;
 unlabeled_statement         : assignment
                             | function_call_statement
@@ -164,89 +174,93 @@ unlabeled_statement         : assignment
                             | empty_statement
                             ;
 
-assignment                  : variable ASSIGN expression SEMI_COLON
+assignment                  : variable ASSIGN expression SEMI_COLON { addAssignment(); }
                             ;
-variable                    : IDENTIFIER array_index_list
+variable                    : identifier array_index_list { addVariable(); }
                             ;
-array_index_list            :
-                            | array_index array_index_list
+array_index_list            : { addEmpty(); }
+                            | array_index array_index_list { addSequence(); }
                             ;
 array_index                 : OPEN_BRACKET expression CLOSE_BRACKET
                             ;
 
 function_call_statement     : function_call SEMI_COLON
                             ;
-function_call               : IDENTIFIER OPEN_PAREN expression_list CLOSE_PAREN
-expression_list             :
+function_call               : identifier OPEN_PAREN expression_list CLOSE_PAREN { addFunctionCall(); }
+expression_list             : { addEmpty(); }
                             | expression
-                            | expression COMMA expression_list
+                            | expression COMMA expression_list { addSequence(); }
                             ;
 
-goto                        : GOTO IDENTIFIER SEMI_COLON
+goto                        : GOTO identifier SEMI_COLON { addGoto(); }
                             ;
 
-return                      : RETURN SEMI_COLON
-                            | RETURN expression SEMI_COLON
+return                      : RETURN SEMI_COLON { addEmpty(); addReturn(); }
+                            | RETURN expression SEMI_COLON { addReturn(); }
                             ;
 
-conditional                 : IF OPEN_PAREN expression CLOSE_PAREN compound
-                            | IF OPEN_PAREN expression CLOSE_PAREN compound ELSE compound
+conditional                 : IF OPEN_PAREN expression CLOSE_PAREN compound { addEmpty(); addIf(); }
+                            | IF OPEN_PAREN expression CLOSE_PAREN compound ELSE compound { addIf(); }
                             ;
 
-repetitive                  : WHILE OPEN_PAREN expression CLOSE_PAREN compound
+repetitive                  : WHILE OPEN_PAREN expression CLOSE_PAREN compound { addWhile(); }
                             ;
 
 compound                    : OPEN_BRACE unlabeled_statement_list CLOSE_BRACE
                             ;
-unlabeled_statement_list    :
-                            | unlabeled_statement unlabeled_statement_list
+unlabeled_statement_list    : { addEmpty(); }
+                            | unlabeled_statement unlabeled_statement_list { addSequence(); }
                             ;
 
-empty_statement             : SEMI_COLON
+empty_statement             : SEMI_COLON { addEmpty(); }
 
 
-expression                  : simple_expression
-                            | simple_expression relational_operator simple_expression
-                            | unop_expression
-                            | unop_expression relational_operator simple_expression
+expression                  : simple_expression { addEmpty(); addEmpty(); addExpression(); }
+                            | simple_expression relational_operator simple_expression { addExpression(); }
+                            | unop_expression { addEmpty(); addEmpty(); addExpression(); }
+                            | unop_expression relational_operator simple_expression { addExpression(); }
                             ;
-simple_expression           : term addition_list
+simple_expression           : term addition_sequence { addSimpleExpression(); }
                             ;
-unop_expression             : unary_operator term addition_list
-addition_list               :
-                            | additive_operator term addition_list
+unop_expression             : unary_operator term addition_sequence { addUnaryOperatorExpression(); }
+addition_sequence           : { addEmpty(); }
+                            | additive_operator term addition_sequence { addAdditionSequence(); }
                             ;
 
-term                        : factor multiplicative_list
+term                        : factor multiplicative_sequence { addTerm(); }
                             ;
-multiplicative_list         :
-                            | multiplicative_operator factor multiplicative_list
+multiplicative_sequence     : { addEmpty(); }
+                            | multiplicative_operator factor multiplicative_sequence { addMultiplicativeSequence(); }
                             ;
 
 factor                      : variable
-                            | INTEGER
+                            | integer
                             | function_call
                             | OPEN_PAREN expression CLOSE_PAREN
                             ;
 
 
-relational_operator         : LESS_OR_EQUAL
-                            | LESS
-                            | EQUAL
-                            | DIFFERENT
-                            | GREATER_OR_EQUAL
-                            | GREATER
+integer                     : INTEGER { addInteger(tokenValue); }
                             ;
-additive_operator           : PLUS
-                            | MINUS
-                            | OR
+
+
+relational_operator         : LESS_OR_EQUAL { addRelationalOperator(tokenValue); }
+                            | LESS { addRelationalOperator(tokenValue); }
+                            | EQUAL { addRelationalOperator(tokenValue); }
+                            | DIFFERENT { addRelationalOperator(tokenValue); }
+                            | GREATER_OR_EQUAL { addRelationalOperator(tokenValue); }
+                            | GREATER { addRelationalOperator(tokenValue); }
                             ;
-unary_operator              : PLUS
-                            | MINUS
-                            | NOT
+additive_operator           : PLUS { addAdditiveOperator(tokenValue); }
+                            | MINUS { addAdditiveOperator(tokenValue); }
+                            | OR { addAdditiveOperator(tokenValue); }
                             ;
-multiplicative_operator     : MULTIPLY
-                            | DIV
-                            | AND
+unary_operator              : PLUS { addUnaryOperator(tokenValue); }
+                            | MINUS { addUnaryOperator(tokenValue); }
+                            | NOT { addUnaryOperator(tokenValue); }
+                            ;
+multiplicative_operator     : MULTIPLY { addMultiplicativeOperator(tokenValue); }
+                            | DIV { addMultiplicativeOperator(tokenValue); }
+                            | AND { addMultiplicativeOperator(tokenValue); }
                             ;
 %%

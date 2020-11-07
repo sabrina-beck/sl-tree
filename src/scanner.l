@@ -5,6 +5,9 @@
 
     int line_num = 1, lexerror = 0;
 
+    /* Variable "tokenValue" is declared in "parser.y" */
+    extern char *tokenValue;
+
 DIGIT   [0-9]
 LETTER  [a-z]
 
@@ -67,10 +70,10 @@ while       return(WHILE);
 <<EOF>>     return(END_OF_FILE);
 
     /* Integers */
-{DIGIT}+    return(INTEGER);
+{DIGIT}+    { strcpy((tokenValue=malloc(yyleng+1)),yytext); return(INTEGER); }
 
     /* Identifiers */
-{LETTER}({LETTER}|{DIGIT})*     return(IDENTIFIER);
+{LETTER}({LETTER}|{DIGIT})*     { strcpy((tokenValue=malloc(yyleng+1)),yytext); return(IDENTIFIER); };
 
     /* Lexical error if didn't match any of the above patterns */
 .          lexerror=1;return(LEXICAL_ERROR);

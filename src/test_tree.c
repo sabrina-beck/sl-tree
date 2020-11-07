@@ -29,8 +29,8 @@ int main(int argc, char **argv) {
 
   int functions, funcalls, whiles, ifs, bin;
   void *tree; // test program does not need to know the type
-  
-  if (yyparse()!=0) 
+
+  if (yyparse()!=0)
     return 0;  // error message printed already
 
   tree = getTree();
