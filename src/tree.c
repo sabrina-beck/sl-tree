@@ -25,26 +25,19 @@ void calculateStats(TreeNodePtr p, int *functions, int *funcalls, int *whiles, i
         return;
     }
 
-    if(p->category == FUNCTION_NODE) {
-        (*functions)++;
-    }
-
-    if(p->category == FUNCTION_CALL_NODE) {
-        (*funcalls)++;
-    }
-
-    if(p->category == WHILE_NODE) {
-        (*whiles)++;
-    }
-
-    if(p->category == IF_NODE) {
-        (*ifs)++;
-    }
-
-    if(p->category == RELATIONAL_OPERATOR_NODE
-        || p->category == ADDITIVE_OPERATOR_NODE
-        || p->category == MULTIPLICATIVE_OPERATOR_NODE) {
-        (*bin)++;
+    switch (p->category) {
+        case FUNCTION_NODE: (*functions)++;
+            break;
+        case FUNCTION_CALL_NODE: (*funcalls)++;
+            break;
+        case WHILE_NODE: (*whiles)++;
+            break;
+        case IF_NODE: (*ifs)++;
+            break;
+        case RELATIONAL_OPERATOR_NODE:
+        case ADDITIVE_OPERATOR_NODE:
+        case MULTIPLICATIVE_OPERATOR_NODE: (*bin)++;
+        default: ;
     }
 
     calculateStats(p->next, functions, funcalls, whiles, ifs, bin);
