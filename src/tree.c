@@ -25,15 +25,6 @@ void *getTree() {
     Stack *stack = getStack();
 
     if (stack->size > 1) {
-
-        TreeNodePtr first = pop(stack);
-        TreeNodePtr second = pop(stack);
-
-        if (first==NULL) printf("first NULL\n");
-        else printf("first %s\n", getCategoryName(first->category));
-        if (second==NULL) printf("second NULL\n");
-        else printf("second %s\n", getCategoryName(second->category));
-
         fprintf(stderr, "Stack should have only one element which is the syntax tree root, but it has %d elements", stack->size);
         exit(EXIT_FAILURE);
     }
@@ -139,7 +130,7 @@ void addReturn() {
 }
 
 void addIf() {
-    addTreeNode(IF_NODE, 2);
+    addTreeNode(IF_NODE, 3);
 }
 
 void addWhile() {
