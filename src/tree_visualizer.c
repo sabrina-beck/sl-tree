@@ -1,9 +1,35 @@
 #include "tree_visualizer.h"
+#include <stdio.h>
 
+void dumpSyntaxTree(TreeNodePtr node, int indent);
 const char *getCategoryName(NodeCategory category);
+void addIndent(int indent);
 
-void dumpTree(void *p, int indent) {
-    // TODO
+void dumpTree(void *root, int indent) {
+    TreeNodePtr tree = (TreeNodePtr) root;
+    dumpSyntaxTree(tree, indent);
+}
+
+void dumpSyntaxTree(TreeNodePtr node, int indent) {
+    if(node == NULL) {
+        return;
+    }
+
+    addIndent(indent);
+    printf("%s(%s)\n", getCategoryName(node->category), node->name);
+
+    // TODO print nexts
+
+    for (int i = 0; i < MAX_CHILD_NODES; i++) {
+        TreeNodePtr subtree = node->subtrees[i];
+        dumpSyntaxTree(subtree, indent + 1);
+    }
+}
+
+void addIndent(int indent) {
+    for (int i = 0; i < indent; i++) {
+        printf("\t");
+    }
 }
 
 const char *getCategoryName(NodeCategory category) {
