@@ -1,36 +1,19 @@
 #include "tree.h"
-#include "stack.h"
 
 #include <stdlib.h>
-#include <stdio.h>
 
 /**
  * Internal variables and functions declaration
  **/
-Stack *stack = NULL;
 
 int count(TreeNodePtr treeNodePtr, NodeCategory category);
 
-Stack *getStack();
-void addTreeNodeWithName(NodeCategory category, int numberOfChildNodes, char *name);
-void addTreeNode(NodeCategory category, int numberOfChildNodes);
 
 /**
  * Public functions implementation
  **/
 void *getTree() {
-    Stack *stack = getStack();
-
-    if (stack->size > 1) {
-        fprintf(stderr, "Stack should have only one element which is the syntax tree root, but it has %d elements", stack->size);
-        exit(EXIT_FAILURE);
-    }
-
-    void* syntaxTree = pop(stack);
-
-    free(stack);
-
-    return syntaxTree;
+    return getSyntaxTree();
 }
 
 void counts(void *p, int *functions, int *funcalls, int *whiles, int *ifs, int *bin) {
@@ -45,145 +28,6 @@ void counts(void *p, int *functions, int *funcalls, int *whiles, int *ifs, int *
     int additiveExpressions = count(treeNodePtr, ADDITIVE_OPERATOR_NODE);
     int multiplicativeExpressions = count(treeNodePtr, MULTIPLICATIVE_OPERATOR_NODE);
     *bin = relationalExpressions + additiveExpressions + multiplicativeExpressions;
-}
-
-void addSequence() {
-    Stack *stack = getStack();
-
-    TreeNodePtr topNode = pop(stack);
-    TreeNodePtr nextNode = pop(stack);
-
-    if (nextNode != NULL) {
-        nextNode->next = topNode;
-        push(stack, nextNode);
-    } else {
-        push(stack, topNode);
-    }
-}
-
-void addEmpty() {
-    Stack *stack = getStack();
-    push(stack, NULL);
-}
-
-void addFunction() {
-    addTreeNode(FUNCTION_NODE, 2);
-}
-
-void addFunctionHeader() {
-    addTreeNode(FUNCTION_HEADER_NODE, 3);
-}
-
-void addExpressionParameter() {
-    addTreeNode(EXPRESSION_PARAMETER_NODE, 2);
-}
-
-void addBlock() {
-    addTreeNode(BLOCK_NODE, 5);
-}
-
-void addTypeDeclaration() {
-    addTreeNode(TYPE_DECLARATION_NODE, 2);
-}
-
-void addDeclaration() {
-    addTreeNode(DECLARATION_NODE, 2);
-}
-
-void addType() {
-    addTreeNode(TYPE_NODE, 2);
-}
-
-void addStatement() {
-    addTreeNode(STATEMENT_NODE, 2);
-}
-
-void addUnlabeledStatement() {
-    Stack *stack = getStack();
-    void *topNode = pop(stack);
-    addEmpty();
-    push(stack, topNode);
-    addStatement();
-}
-
-void addLabel() {
-    addTreeNode(LABEL_NODE, 1);
-}
-
-void addAssignment() {
-    addTreeNode(ASSIGNMENT_NODE, 2);
-}
-
-void addVariable() {
-    addTreeNode(VARIABLE_NODE, 2);
-}
-
-void addFunctionCall() {
-    addTreeNode(FUNCTION_CALL_NODE, 2);
-}
-
-void addGoto() {
-    addTreeNode(GOTO_NODE, 1);
-}
-
-void addReturn() {
-    addTreeNode(RETURN_NODE, 1);
-}
-
-void addIf() {
-    addTreeNode(IF_NODE, 3);
-}
-
-void addWhile() {
-    addTreeNode(WHILE_NODE, 2);
-}
-
-void addExpression() {
-    addTreeNode(EXPRESSION_NODE, 3);
-}
-
-void addSimpleExpression() {
-    addTreeNode(SIMPLE_EXPRESSION_NODE, 2);
-}
-
-void addUnaryOperatorExpression() {
-    addTreeNode(UNARY_OPERATOR_EXPRESSION_NODE, 3);
-}
-
-void addAdditionSequence() {
-    addTreeNode(ADDITION_SEQUENCE_NODE, 3);
-}
-
-void addTerm() {
-    addTreeNode(TERM_NODE, 2);
-}
-
-void addMultiplicativeSequence() {
-    addTreeNode(MULTIPLICATIVE_SEQUENCE_NODE, 3);
-}
-
-void addInteger(char *tokenValue) {
-    addTreeNodeWithName(INTEGER_NODE, 0, tokenValue);
-}
-
-void addIdentifier(char *tokenValue) {
-    addTreeNodeWithName(IDENTIFIER_NODE, 0, tokenValue);
-}
-
-void addRelationalOperator(char *tokenValue) {
-    addTreeNodeWithName(RELATIONAL_OPERATOR_NODE, 0, tokenValue);
-}
-
-void addAdditiveOperator(char *tokenValue) {
-    addTreeNodeWithName(ADDITIVE_OPERATOR_NODE, 0, tokenValue);
-}
-
-void addUnaryOperator(char *tokenValue) {
-    addTreeNodeWithName(UNARY_OPERATOR_NODE, 0, tokenValue);
-}
-
-void addMultiplicativeOperator(char *tokenValue) {
-    addTreeNodeWithName(MULTIPLICATIVE_OPERATOR_NODE, 0, tokenValue);
 }
 
 /**
@@ -208,36 +52,4 @@ int count(TreeNodePtr treeNodePtr, NodeCategory category) {
     }
 
     return nodesWithCategory;
-}
-
-Stack *getStack() {
-    if (stack == NULL) {
-        stack = newStack();
-    }
-    return stack;
-}
-
-void addTreeNodeWithName(NodeCategory category, int numberOfChildNodes, char *name) {
-
-    TreeNodePtr node = malloc(sizeof(TreeNode));
-    node->category = category;
-    node->name = name;
-    node->next = NULL;
-
-    Stack *stack = getStack();
-
-    for (int i = 0; i < numberOfChildNodes; i++) {
-        TreeNodePtr childNode = pop(stack);
-        node->subtrees[i] = childNode;
-    }
-
-    for (int i = numberOfChildNodes; i < MAX_CHILD_NODES; i++) {
-        node->subtrees[i] = NULL;
-    }
-
-    push(stack, node);
-}
-
-void addTreeNode(NodeCategory category, int numberOfChildNodes) {
-    addTreeNodeWithName(category, numberOfChildNodes, NULL);
 }
