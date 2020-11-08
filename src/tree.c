@@ -4,40 +4,41 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/**
+ * Internal variables and functions declaration
+ **/
 Stack *stack = NULL;
 
+int count(TreeNodePtr treeNodePtr, NodeCategory category);
+
+Stack *getStack();
+void addTreeNodeWithName(NodeCategory category, int numberOfChildNodes, char *name);
+void addTreeNode(NodeCategory category, int numberOfChildNodes);
+
+// FIXME remove me
 const char *getCategoryName(NodeCategory category);
 
-Stack *getStack() {
-    if (stack == NULL) {
-        stack = newStack();
-    }
-    return stack;
-}
-
+/**
+ * Public functions implementation
+ **/
 void *getTree() {
     Stack *stack = getStack();
-    return pop(stack);
-}
 
-int count(TreeNodePtr treeNodePtr, NodeCategory category) {
-    if (treeNodePtr == NULL) {
-        return 0;
+    if (stack->size > 1) {
+
+        TreeNodePtr first = pop(stack);
+        TreeNodePtr second = pop(stack);
+
+        if (first==NULL) printf("first NULL\n");
+        else printf("first %s\n", getCategoryName(first->category));
+        if (second==NULL) printf("second NULL\n");
+        else printf("second %s\n", getCategoryName(second->category));
+
+        fprintf(stderr, "Stack should have only one element which is the syntax tree root, but it has %d elements", stack->size);
+        exit(EXIT_FAILURE);
     }
 
-    int nodesWithCategory = 0;
-    if(treeNodePtr->category == category) {
-        nodesWithCategory++;
-    }
-
-    nodesWithCategory += count(treeNodePtr->next, category);
-
-    for (int i = 0; i < MAX_CHILD_NODES; i++) {
-        TreeNodePtr child = treeNodePtr->subtrees[i];
-        nodesWithCategory += count(child, category);
-    }
-
-    return nodesWithCategory;
+    return (TreeNodePtr) pop(stack);
 }
 
 void counts(void *p, int *functions, int *funcalls, int *whiles, int *ifs, int *bin) {
@@ -52,35 +53,6 @@ void counts(void *p, int *functions, int *funcalls, int *whiles, int *ifs, int *
     int additiveExpressions = count(treeNodePtr, ADDITIVE_OPERATOR_NODE);
     int multiplicativeExpressions = count(treeNodePtr, MULTIPLICATIVE_OPERATOR_NODE);
     *bin = relationalExpressions + additiveExpressions + multiplicativeExpressions;
-}
-
-void dumpTree(TreeNodePtr p, int indent) {
-    // TODO
-}
-
-void addTreeNodeWithName(NodeCategory category, int numberOfChildNodes, char *name) {
-
-    TreeNodePtr node = malloc(sizeof(TreeNode));
-    node->category = category;
-    node->name = name;
-    node->next = NULL;
-
-    Stack *stack = getStack();
-
-    for (int i = 0; i < numberOfChildNodes; i++) {
-        TreeNodePtr childNode = pop(stack);
-        node->subtrees[i] = childNode;
-    }
-
-    for (int i = numberOfChildNodes; i < MAX_CHILD_NODES; i++) {
-        node->subtrees[i] = NULL;
-    }
-
-    push(stack, node);
-}
-
-void addTreeNode(NodeCategory category, int numberOfChildNodes) {
-    addTreeNodeWithName(category, numberOfChildNodes, NULL);
 }
 
 void addSequence() {
@@ -222,6 +194,63 @@ void addMultiplicativeOperator(char *tokenValue) {
     addTreeNodeWithName(MULTIPLICATIVE_OPERATOR_NODE, 0, tokenValue);
 }
 
+/**
+ * Internal functions implementation
+ **/
+
+int count(TreeNodePtr treeNodePtr, NodeCategory category) {
+    if (treeNodePtr == NULL) {
+        return 0;
+    }
+
+    int nodesWithCategory = 0;
+    if(treeNodePtr->category == category) {
+        nodesWithCategory++;
+    }
+
+    nodesWithCategory += count(treeNodePtr->next, category);
+
+    for (int i = 0; i < MAX_CHILD_NODES; i++) {
+        TreeNodePtr child = treeNodePtr->subtrees[i];
+        nodesWithCategory += count(child, category);
+    }
+
+    return nodesWithCategory;
+}
+
+Stack *getStack() {
+    if (stack == NULL) {
+        stack = newStack();
+    }
+    return stack;
+}
+
+void addTreeNodeWithName(NodeCategory category, int numberOfChildNodes, char *name) {
+
+    TreeNodePtr node = malloc(sizeof(TreeNode));
+    node->category = category;
+    node->name = name;
+    node->next = NULL;
+
+    Stack *stack = getStack();
+
+    for (int i = 0; i < numberOfChildNodes; i++) {
+        TreeNodePtr childNode = pop(stack);
+        node->subtrees[i] = childNode;
+    }
+
+    for (int i = numberOfChildNodes; i < MAX_CHILD_NODES; i++) {
+        node->subtrees[i] = NULL;
+    }
+
+    push(stack, node);
+}
+
+void addTreeNode(NodeCategory category, int numberOfChildNodes) {
+    addTreeNodeWithName(category, numberOfChildNodes, NULL);
+}
+
+// FIXME remove me
 const char *getCategoryName(NodeCategory category) {
     switch (category) {
         case FUNCTION_NODE:

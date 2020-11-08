@@ -1,4 +1,3 @@
-
 #define MAX_CHILD_NODES 5
 
 typedef enum {
@@ -52,44 +51,60 @@ typedef struct _treeNode {
     struct _treeNode *subtrees[MAX_CHILD_NODES];
 } TreeNode, *TreeNodePtr;
 
-void *getTree();  // returns any pointer
+/**
+ * Tree manipulation
+ **/
+void *getTree();
 
 void counts(void *p, int *functions, int *funcalls, int *whiles, int *ifs, int *bin);
-
-void dumpTree(TreeNodePtr p, int indent);
 
 /**
  * Tree generation
  **/
 void addSequence();
 
+void addEmpty();
+
 void addFunction();
+
 void addFunctionHeader();
 void addExpressionParameter();
+
 void addBlock();
+
 void addTypeDeclaration();
 void addDeclaration();
+
 void addIdentifier(char *tokenValue);
+
 void addType();
+
 void addStatement();
 void addUnlabeledStatement();
+
 void addLabel();
+
 void addAssignment();
+
 void addVariable();
+
 void addFunctionCall();
+
 void addGoto();
 void addReturn();
 void addIf();
 void addWhile();
+
 void addExpression();
 void addSimpleExpression();
 void addUnaryOperatorExpression();
 void addAdditionSequence();
 void addTerm();
 void addMultiplicativeSequence();
+
 void addInteger(char *tokenValue);
+
 void addRelationalOperator(char *tokenValue);
 void addAdditiveOperator(char *tokenValue);
 void addUnaryOperator(char *tokenValue);
 void addMultiplicativeOperator(char *tokenValue);
-void addEmpty();
