@@ -1,29 +1,40 @@
 #include "tree_visualizer.h"
 #include <stdio.h>
 
-void dumpSyntaxTree(TreeNodePtr node, int indent);
+typedef enum {false, true} bool;
+
+void dumpSyntaxTree(TreeNodePtr node, int indent, bool isNext);
 const char *getCategoryName(NodeCategory category);
 void addIndent(int indent);
 
-void dumpTree(void *root, int indent) {
+void dumpTree(void *root) {
     TreeNodePtr tree = (TreeNodePtr) root;
-    dumpSyntaxTree(tree, indent);
+    dumpSyntaxTree(tree, 0, false);
 }
 
-void dumpSyntaxTree(TreeNodePtr node, int indent) {
+void dumpSyntaxTree(TreeNodePtr node, int indent, bool isNext) {
     if(node == NULL) {
         return;
     }
 
     addIndent(indent);
-    printf("%s(%s)\n", getCategoryName(node->category), node->name);
-
-    // TODO print nexts
-
-    for (int i = 0; i < MAX_CHILD_NODES; i++) {
-        TreeNodePtr subtree = node->subtrees[i];
-        dumpSyntaxTree(subtree, indent + 1);
+    if(isNext) {
+        printf("|-> ");
     }
+
+    if(node->name == NULL) {
+        printf("%s\n", getCategoryName(node->category));
+    } else {
+        printf("%s(%s)\n", getCategoryName(node->category), node->name);
+    }
+
+    for (int i = MAX_CHILD_NODES-1; i >= 0; i--) {
+        TreeNodePtr subtree = node->subtrees[i];
+        dumpSyntaxTree(subtree, indent + 1, false);
+    }
+
+    dumpSyntaxTree(node->next, indent, true);
+
 }
 
 void addIndent(int indent) {

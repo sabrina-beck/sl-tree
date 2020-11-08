@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include "test_tree.h"
 #include "tree.h"
+//#include "tree_visualizer.h"
 
 extern int line_num;
 
@@ -40,6 +41,8 @@ int main(int argc, char **argv) {
   printf("%d loop(s)\n", whiles);
   printf("%d conditional(s)\n", ifs);
   printf("%d binary operation(s)\n", bin);
+
+  //dumpTree(tree);
   
   return 0;
 

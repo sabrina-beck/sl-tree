@@ -1,3 +1,6 @@
-#include "tree_builder.h"
+#ifndef   TREE_BUILDER_H
+    #define   TREE_BUILDER_H
+    #include "tree_builder.h"
+#endif
 
-void dumpTree(void *p, int indent);
+void dumpTree(void *p);

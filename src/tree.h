@@ -1,4 +1,7 @@
-#include "tree_builder.h"
+#ifndef   TREE_BUILDER_H
+    #define   TREE_BUILDER_H
+    #include "tree_builder.h"
+#endif
 
 /**
  * Tree manipulation
