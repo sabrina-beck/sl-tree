@@ -150,24 +150,24 @@ void addExpression() {
     addTreeNode(EXPRESSION_NODE, 3);
 }
 
-void addSimpleExpression() {
-    addTreeNode(SIMPLE_EXPRESSION_NODE, 2);
+void addBinaryExpression() {
+    addTreeNode(BINARY_EXPRESSION_NODE, 3);
 }
 
-void addUnaryOperatorExpression() {
-    addTreeNode(UNARY_OPERATOR_EXPRESSION_NODE, 3);
+void addBooleanExpression() {
+    addTreeNode(BOOLEAN_EXPRESSION_NODE, 3);
 }
 
-void addAdditionSequence() {
-    addTreeNode(ADDITION_SEQUENCE_NODE, 3);
+void addUnaryExpression() {
+    addTreeNode(UNARY_EXPRESSION_NODE, 2);
 }
 
 void addTerm() {
-    addTreeNode(TERM_NODE, 2);
+    addTreeNode(TERM_NODE, 3);
 }
 
-void addMultiplicativeSequence() {
-    addTreeNode(MULTIPLICATIVE_SEQUENCE_NODE, 3);
+void addFactor() {
+    addTreeNode(FACTOR_NODE, 1);
 }
 
 void addInteger(char *tokenValue) {

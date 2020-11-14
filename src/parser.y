@@ -214,29 +214,26 @@ unlabeled_statement_list    : { addEmpty(); }
 
 empty_statement             : SEMI_COLON { addEmpty(); }
 
-
-expression                  : simple_expression { addEmpty(); addEmpty(); addExpression(); }
-                            | simple_expression relational_operator simple_expression { addExpression(); }
-                            | unop_expression { addEmpty(); addEmpty(); addExpression(); }
-                            | unop_expression relational_operator simple_expression { addExpression(); }
+expression                  : term
+                            | unop_expression
+                            | binary_expression
+                            | boolean_expression
                             ;
-simple_expression           : term addition_sequence { addSimpleExpression(); }
+boolean_expression          : expression relational_operator expression  { addBooleanExpression(); }
                             ;
-unop_expression             : unary_operator term addition_sequence { addUnaryOperatorExpression(); }
-addition_sequence           : { addEmpty(); }
-                            | additive_operator term addition_sequence { addAdditionSequence(); }
+binary_expression           : term additive_operator term  { addBinaryExpression(); }
                             ;
-
-term                        : factor multiplicative_sequence { addTerm(); }
-                            ;
-multiplicative_sequence     : { addEmpty(); }
-                            | multiplicative_operator factor multiplicative_sequence { addMultiplicativeSequence(); }
+unop_expression             : unary_operator expression { addUnaryExpression(); }
                             ;
 
-factor                      : variable
-                            | integer
-                            | function_call
-                            | OPEN_PAREN expression CLOSE_PAREN
+term                        : term multiplicative_operator term { addTerm(); }
+                            | factor { addEmpty(); addEmpty(); addTerm(); }
+                            ;
+
+factor                      : variable { addFactor(); }
+                            | integer { addFactor(); }
+                            | function_call { addFactor(); }
+                            | OPEN_PAREN expression CLOSE_PAREN { addFactor(); }
                             ;
 
 

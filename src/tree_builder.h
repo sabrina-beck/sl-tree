@@ -37,11 +37,11 @@ typedef enum {
     WHILE_NODE,
 
     EXPRESSION_NODE,
-    SIMPLE_EXPRESSION_NODE,
-    UNARY_OPERATOR_EXPRESSION_NODE,
-    ADDITION_SEQUENCE_NODE,
+    BOOLEAN_EXPRESSION_NODE,
+    BINARY_EXPRESSION_NODE,
+    UNARY_EXPRESSION_NODE,
     TERM_NODE,
-    MULTIPLICATIVE_SEQUENCE_NODE,
+    FACTOR_NODE,
 
     INTEGER_NODE,
     IDENTIFIER_NODE,
@@ -108,11 +108,11 @@ void addIf();
 void addWhile();
 
 void addExpression();
-void addSimpleExpression();
-void addUnaryOperatorExpression();
-void addAdditionSequence();
+void addBooleanExpression();
+void addBinaryExpression();
+void addUnaryExpression();
 void addTerm();
-void addMultiplicativeSequence();
+void addFactor();
 
 void addInteger(char *tokenValue);
 

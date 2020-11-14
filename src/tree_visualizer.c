@@ -55,6 +55,16 @@ const char *getCategoryName(NodeCategory category) {
 
         case BLOCK_NODE:
             return "BLOCK";
+        case LABELS_NODE:
+            return "LABELS";
+        case TYPES_NODE:
+            return "TYPES";
+        case VARIABLES_NODE:
+            return "VARIABLES";
+        case FUNCTIONS_NODE:
+            return "FUNCTIONS";
+        case BODY_NODE:
+            return "BODY";
 
         case TYPE_DECLARATION_NODE:
             return "TYPE_DECLARATION";
@@ -90,16 +100,16 @@ const char *getCategoryName(NodeCategory category) {
 
         case EXPRESSION_NODE:
             return "EXPRESSION";
-        case SIMPLE_EXPRESSION_NODE:
-            return "SIMPLE_EXPRESSION";
-        case UNARY_OPERATOR_EXPRESSION_NODE:
+        case BOOLEAN_EXPRESSION_NODE:
+            return "BOOLEAN_EXPRESSION";
+        case BINARY_EXPRESSION_NODE:
+            return "BINARY_EXPRESSION";
+        case UNARY_EXPRESSION_NODE:
             return "UNARY_OPERATOR_EXPRESSION";
-        case ADDITION_SEQUENCE_NODE:
-            return "ADDITION_SEQUENCE";
         case TERM_NODE:
             return "TERM";
-        case MULTIPLICATIVE_SEQUENCE_NODE:
-            return "MULTIPLICATIVE_SEQUENCE";
+        case FACTOR_NODE:
+            return "FACTOR";
 
         case INTEGER_NODE:
             return "INTEGER";
