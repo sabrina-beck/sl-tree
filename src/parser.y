@@ -1,6 +1,6 @@
 %{
 
-#include "tree_builder.h"
+#include "tree.h"
 #include<stdio.h>
 
 /* FLEX functions */

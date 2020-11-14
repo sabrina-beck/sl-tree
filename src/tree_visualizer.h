@@ -2,10 +2,7 @@
  * This file provides facilities to visualize the syntax tree
  **/
 
-#ifndef   TREE_BUILDER_H
-    #define   TREE_BUILDER_H
-    #include "tree_builder.h"
-#endif
+#include "tree.h"
 
 /**
  * It prints the syntax tree on standard output
