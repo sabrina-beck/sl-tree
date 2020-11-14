@@ -80,62 +80,18 @@ void counts(void *p, int *functions, int *funcalls, int *whiles, int *ifs, int *
  * Tree generation functions used by the parser
  **/
 
+/**
+ * Initializes a tree node considering that the "numberOfChildNodes" top elements on the stack
+ * are the subtrees of the new node.
+ **/
+void addTreeNodeWithName(NodeCategory category, int numberOfChildNodes, char *name);
+void addTreeNode(NodeCategory category, int numberOfChildNodes);
+
+/**
+ * A sequence is defined by the "next" attribute in a tree node, each subtree can have another subtree in its sequence
+ * this is used by sequence of statements, sequence of identifiers, etc.
+ **/
 void addSequence();
 
 void addEmpty();
-
-void addFunction();
-
-void addFunctionHeader();
-void addExpressionParameterByReference();
-void addExpressionParameterByValue();
-void addFunctionParameter();
-
-void addBlock();
-void addLabels();
-void addTypes();
-void addVariables();
-void addFunctions();
-void addBody();
-
-void addTypeDeclaration();
-void addDeclaration();
-
 void addIdentifier(char *tokenValue);
-
-void addType();
-void addArraySize();
-
-void addStatement();
-void addUnlabeledStatement();
-
-void addLabel();
-
-void addAssignment();
-
-void addVariable();
-void addArrayIndex();
-
-void addFunctionCall();
-
-void addGoto();
-void addReturn();
-void addIf();
-void addWhile();
-
-void addCompound();
-
-void addExpression();
-void addBinaryOperatorExpression();
-void addUnaryOperatorExpression();
-void addAdditiveOperation();
-void addTerm();
-void addMultiplicativeOperation();
-void addFactor();
-
-void addInteger(char *tokenValue);
-
-void addRelationalOperator(char *tokenValue);
-void addAdditiveOperator(char *tokenValue);
-void addUnaryOperator(char *tokenValue);
-void addMultiplicativeOperator(char *tokenValue);

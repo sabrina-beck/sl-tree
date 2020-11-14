@@ -72,11 +72,11 @@ char *tokenValue;
 program                     : function END_OF_FILE {return 0;}
                             ;
 
-function                    : function_header block { addFunction(); }
+function                    : function_header block { addTreeNode(FUNCTION_NODE, 2); }
                             ;
 
 
-function_header             : function_return_type identifier formal_parameters { addFunctionHeader(); }
+function_header             : function_return_type identifier formal_parameters { addTreeNode(FUNCTION_HEADER_NODE, 3); }
                             ;
 function_return_type        : VOID { addEmpty(); }
                             | identifier
@@ -90,48 +90,48 @@ formal_parameter_list       : formal_parameter
 formal_parameter            : expression_parameter
                             | function_parameter
                             ;
-expression_parameter        : VAR identifier_list COLON identifier { addExpressionParameterByReference(); }
-                            | identifier_list COLON identifier { addExpressionParameterByValue(); }
+expression_parameter        : VAR identifier_list COLON identifier { addTreeNode(EXPRESSION_PARAMETER_BY_REFERENCE_NODE, 2); }
+                            | identifier_list COLON identifier { addTreeNode(EXPRESSION_PARAMETER_BY_VALUE_NODE, 2); }
                             ;
-function_parameter          : function_header { addFunctionParameter(); }
+function_parameter          : function_header { addTreeNode(FUNCTION_PARAMETER_NODE, 1); }
                             ;
 
 
-block                       : labels_section types_section variables_section functions_section body { addBlock(); }
+block                       : labels_section types_section variables_section functions_section body { addTreeNode(BLOCK_NODE, 5); }
                             ;
 
 labels_section              : { addEmpty(); }
                             | labels
                             ;
-labels                      : LABELS identifier_list SEMI_COLON { addLabels(); }
+labels                      : LABELS identifier_list SEMI_COLON { addTreeNode(LABELS_NODE, 1); }
                             ;
 
 types_section               : { addEmpty(); }
                             | types
                             ;
-types                       : TYPES type_declaration_list { addTypes(); }
+types                       : TYPES type_declaration_list { addTreeNode(TYPES_NODE, 1); }
                             ;
 type_declaration_list       : type_declaration
                             | type_declaration type_declaration_list { addSequence(); }
                             ;
-type_declaration            : identifier ASSIGN type SEMI_COLON { addTypeDeclaration(); }
+type_declaration            : identifier ASSIGN type SEMI_COLON { addTreeNode(TYPE_DECLARATION_NODE, 2); }
                             ;
 
 variables_section           : { addEmpty(); }
                             | variables
                             ;
-variables                   : VARS declarations_list { addVariables(); }
+variables                   : VARS declarations_list { addTreeNode(VARIABLES_NODE, 1); }
                             ;
 declarations_list           : declaration SEMI_COLON
                             | declaration SEMI_COLON declarations_list { addSequence(); }
                             ;
-declaration                 : identifier_list COLON type { addDeclaration(); }
+declaration                 : identifier_list COLON type { addTreeNode(DECLARATION_NODE, 2); }
                             ;
 
 functions_section           : { addEmpty(); }
                             | functions
                             ;
-functions                   : FUNCTIONS functions_list { addFunctions(); }
+functions                   : FUNCTIONS functions_list { addTreeNode(FUNCTIONS_NODE, 1); }
                             ;
 functions_list              : function
                             | function functions_list { addSequence(); }
@@ -145,24 +145,24 @@ identifier                  : IDENTIFIER { addIdentifier(tokenValue); }
                             ;
 
 
-type                        : identifier array_size_declaration_list { addType(); }
+type                        : identifier array_size_declaration_list { addTreeNode(TYPE_NODE, 2); }
                             ;
 array_size_declaration_list : { addEmpty(); }
                             | array_size_declaration array_size_declaration_list { addSequence(); }
                             ;
-array_size_declaration      : OPEN_BRACKET integer CLOSE_BRACKET { addArraySize(); }
+array_size_declaration      : OPEN_BRACKET integer CLOSE_BRACKET { addTreeNode(ARRAY_SIZE_NODE, 1); }
                             ;
 
 
-body                        : OPEN_BRACE statement_list CLOSE_BRACE { addBody(); }
+body                        : OPEN_BRACE statement_list CLOSE_BRACE { addTreeNode(BODY_NODE, 1); }
                             ;
 statement_list              : { addEmpty(); }
                             | statement statement_list { addSequence(); }
                             ;
-statement                   : label unlabeled_statement { addStatement(); }
-                            | unlabeled_statement { addUnlabeledStatement(); }
+statement                   : label unlabeled_statement { addTreeNode(STATEMENT_NODE, 2); }
+                            | unlabeled_statement { addTreeNode(STATEMENT_NODE, 1); }
                             ;
-label                       : identifier COLON { addLabel(); }
+label                       : identifier COLON { addTreeNode(LABEL_NODE, 1); }
                             ;
 unlabeled_statement         : assignment
                             | function_call_statement
@@ -174,39 +174,39 @@ unlabeled_statement         : assignment
                             | empty_statement
                             ;
 
-assignment                  : variable ASSIGN expression SEMI_COLON { addAssignment(); }
+assignment                  : variable ASSIGN expression SEMI_COLON { addTreeNode(ASSIGNMENT_NODE, 2); }
                             ;
-variable                    : identifier array_index_list { addVariable(); }
+variable                    : identifier array_index_list { addTreeNode(VARIABLE_NODE, 2); }
                             ;
 array_index_list            : { addEmpty(); }
                             | array_index array_index_list { addSequence(); }
                             ;
-array_index                 : OPEN_BRACKET expression CLOSE_BRACKET { addArrayIndex(); }
+array_index                 : OPEN_BRACKET expression CLOSE_BRACKET { addTreeNode(ARRAY_INDEX_NODE, 1); }
                             ;
 
 function_call_statement     : function_call SEMI_COLON
                             ;
-function_call               : identifier OPEN_PAREN expression_list CLOSE_PAREN { addFunctionCall(); }
+function_call               : identifier OPEN_PAREN expression_list CLOSE_PAREN { addTreeNode(FUNCTION_CALL_NODE, 2); }
 expression_list             : { addEmpty(); }
                             | expression
                             | expression COMMA expression_list { addSequence(); }
                             ;
 
-goto                        : GOTO identifier SEMI_COLON { addGoto(); }
+goto                        : GOTO identifier SEMI_COLON { addTreeNode(GOTO_NODE, 1); }
                             ;
 
-return                      : RETURN SEMI_COLON { addEmpty(); addReturn(); }
-                            | RETURN expression SEMI_COLON { addReturn(); }
+return                      : RETURN SEMI_COLON { addTreeNode(RETURN_NODE, 0); }
+                            | RETURN expression SEMI_COLON { addTreeNode(RETURN_NODE, 1); }
                             ;
 
-conditional                 : IF OPEN_PAREN expression CLOSE_PAREN compound { addEmpty(); addIf(); }
-                            | IF OPEN_PAREN expression CLOSE_PAREN compound ELSE compound { addIf(); }
+conditional                 : IF OPEN_PAREN expression CLOSE_PAREN compound { addTreeNode(IF_NODE, 2); }
+                            | IF OPEN_PAREN expression CLOSE_PAREN compound ELSE compound { addTreeNode(IF_NODE, 3); }
                             ;
 
-repetitive                  : WHILE OPEN_PAREN expression CLOSE_PAREN compound { addWhile(); }
+repetitive                  : WHILE OPEN_PAREN expression CLOSE_PAREN compound { addTreeNode(WHILE_NODE, 2); }
                             ;
 
-compound                    : OPEN_BRACE unlabeled_statement_list CLOSE_BRACE { addCompound(); }
+compound                    : OPEN_BRACE unlabeled_statement_list CLOSE_BRACE { addTreeNode(COMPOUND_NODE, 1); }
                             ;
 unlabeled_statement_list    : { addEmpty(); }
                             | unlabeled_statement unlabeled_statement_list { addSequence(); }
@@ -214,53 +214,53 @@ unlabeled_statement_list    : { addEmpty(); }
 
 empty_statement             : SEMI_COLON { addEmpty(); }
 
-expression                  : binaryop_expression { addEmpty(); addEmpty(); addExpression(); }
-                            | binaryop_expression relational_operator binaryop_expression { addExpression(); }
-                            | unop_expression { addEmpty(); addEmpty(); addExpression(); }
-                            | unop_expression relational_operator binaryop_expression { addExpression(); }
+expression                  : binaryop_expression { addTreeNode(EXPRESSION_NODE, 1); }
+                            | binaryop_expression relational_operator binaryop_expression { addTreeNode(EXPRESSION_NODE, 3); }
+                            | unop_expression { addTreeNode(EXPRESSION_NODE, 1); }
+                            | unop_expression relational_operator binaryop_expression { addTreeNode(EXPRESSION_NODE, 3); }
                             ;
-binaryop_expression         : term additive_operation { addBinaryOperatorExpression(); }
+binaryop_expression         : term additive_operation { addTreeNode(BINARY_OPERATOR_EXPRESSION_NODE, 2); }
                             ;
-unop_expression             : unary_operator term additive_operation { addUnaryOperatorExpression(); }
+unop_expression             : unary_operator term additive_operation { addTreeNode(UNARY_OPERATOR_EXPRESSION_NODE, 3); }
                             ;
 additive_operation          : { addEmpty(); }
-                            | additive_operator term additive_operation { addAdditiveOperation(); }
+                            | additive_operator term additive_operation { addTreeNode(ADDITIVE_OPERATION_NODE, 3); }
                             ;
 
-term                        : factor multiplicative_operation { addTerm(); }
+term                        : factor multiplicative_operation { addTreeNode(TERM_NODE, 2); }
                             ;
 multiplicative_operation    : { addEmpty(); }
-                            | multiplicative_operator factor multiplicative_operation { addMultiplicativeOperation(); }
+                            | multiplicative_operator factor multiplicative_operation { addTreeNode(MULTIPLICATIVE_OPERATION_NODE, 3); }
                             ;
 
-factor                      : variable { addFactor(); }
-                            | integer { addFactor(); }
-                            | function_call { addFactor(); }
-                            | OPEN_PAREN expression CLOSE_PAREN { addFactor(); }
-                            ;
-
-
-integer                     : INTEGER { addInteger(tokenValue); }
+factor                      : variable { addTreeNode(FACTOR_NODE, 1); }
+                            | integer { addTreeNode(FACTOR_NODE, 1); }
+                            | function_call { addTreeNode(FACTOR_NODE, 1); }
+                            | OPEN_PAREN expression CLOSE_PAREN { addTreeNode(FACTOR_NODE, 1); }
                             ;
 
 
-relational_operator         : LESS_OR_EQUAL { addRelationalOperator(tokenValue); }
-                            | LESS { addRelationalOperator(tokenValue); }
-                            | EQUAL { addRelationalOperator(tokenValue); }
-                            | DIFFERENT { addRelationalOperator(tokenValue); }
-                            | GREATER_OR_EQUAL { addRelationalOperator(tokenValue); }
-                            | GREATER { addRelationalOperator(tokenValue); }
+integer                     : INTEGER { addTreeNodeWithName(INTEGER_NODE, 0, tokenValue); }
                             ;
-additive_operator           : PLUS { addAdditiveOperator(tokenValue); }
-                            | MINUS { addAdditiveOperator(tokenValue); }
-                            | OR { addAdditiveOperator(tokenValue); }
+
+
+relational_operator         : LESS_OR_EQUAL { addTreeNodeWithName(RELATIONAL_OPERATOR_NODE, 0, tokenValue); }
+                            | LESS { addTreeNodeWithName(RELATIONAL_OPERATOR_NODE, 0, tokenValue); }
+                            | EQUAL { addTreeNodeWithName(RELATIONAL_OPERATOR_NODE, 0, tokenValue); }
+                            | DIFFERENT { addTreeNodeWithName(RELATIONAL_OPERATOR_NODE, 0, tokenValue); }
+                            | GREATER_OR_EQUAL { addTreeNodeWithName(RELATIONAL_OPERATOR_NODE, 0, tokenValue); }
+                            | GREATER { addTreeNodeWithName(RELATIONAL_OPERATOR_NODE, 0, tokenValue); }
                             ;
-unary_operator              : PLUS { addUnaryOperator(tokenValue); }
-                            | MINUS { addUnaryOperator(tokenValue); }
-                            | NOT { addUnaryOperator(tokenValue); }
+additive_operator           : PLUS { addTreeNodeWithName(ADDITIVE_OPERATOR_NODE, 0, tokenValue); }
+                            | MINUS { addTreeNodeWithName(ADDITIVE_OPERATOR_NODE, 0, tokenValue); }
+                            | OR { addTreeNodeWithName(ADDITIVE_OPERATOR_NODE, 0, tokenValue); }
                             ;
-multiplicative_operator     : MULTIPLY { addMultiplicativeOperator(tokenValue); }
-                            | DIV { addMultiplicativeOperator(tokenValue); }
-                            | AND { addMultiplicativeOperator(tokenValue); }
+unary_operator              : PLUS { addTreeNodeWithName(UNARY_OPERATOR_NODE, 0, tokenValue); }
+                            | MINUS { addTreeNodeWithName(UNARY_OPERATOR_NODE, 0, tokenValue); }
+                            | NOT { addTreeNodeWithName(UNARY_OPERATOR_NODE, 0, tokenValue); }
+                            ;
+multiplicative_operator     : MULTIPLY { addTreeNodeWithName(MULTIPLICATIVE_OPERATOR_NODE, 0, tokenValue); }
+                            | DIV { addTreeNodeWithName(MULTIPLICATIVE_OPERATOR_NODE, 0, tokenValue); }
+                            | AND { addTreeNodeWithName(MULTIPLICATIVE_OPERATOR_NODE, 0, tokenValue); }
                             ;
 %%
