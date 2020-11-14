@@ -93,7 +93,7 @@ formal_parameter            : expression_parameter
 expression_parameter        : VAR identifier_list COLON identifier { addExpressionParameter(); }
                             | identifier_list COLON identifier { addExpressionParameter(); }
                             ;
-function_parameter          : function_header
+function_parameter          : function_header { addFunctionParameter(); }
                             ;
 
 
@@ -103,13 +103,13 @@ block                       : labels_section types_section variables_section fun
 labels_section              : { addEmpty(); }
                             | labels
                             ;
-labels                      : LABELS identifier_list SEMI_COLON
+labels                      : LABELS identifier_list SEMI_COLON { addLabels(); }
                             ;
 
 types_section               : { addEmpty(); }
                             | types
                             ;
-types                       : TYPES type_declaration_list
+types                       : TYPES type_declaration_list { addTypes(); }
                             ;
 type_declaration_list       : type_declaration
                             | type_declaration type_declaration_list { addSequence(); }
@@ -120,7 +120,7 @@ type_declaration            : identifier ASSIGN type SEMI_COLON { addTypeDeclara
 variables_section           : { addEmpty(); }
                             | variables
                             ;
-variables                   : VARS declarations_list
+variables                   : VARS declarations_list { addVariables(); }
                             ;
 declarations_list           : declaration SEMI_COLON
                             | declaration SEMI_COLON declarations_list { addSequence(); }
@@ -131,7 +131,7 @@ declaration                 : identifier_list COLON type { addDeclaration(); }
 functions_section           : { addEmpty(); }
                             | functions
                             ;
-functions                   : FUNCTIONS functions_list
+functions                   : FUNCTIONS functions_list { addFunctions(); }
                             ;
 functions_list              : function
                             | function functions_list { addSequence(); }
@@ -154,7 +154,7 @@ array_size_declaration      : OPEN_BRACKET integer CLOSE_BRACKET
                             ;
 
 
-body                        : OPEN_BRACE statement_list CLOSE_BRACE
+body                        : OPEN_BRACE statement_list CLOSE_BRACE { addBody(); }
                             ;
 statement_list              : { addEmpty(); }
                             | statement statement_list { addSequence(); }

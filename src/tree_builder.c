@@ -62,8 +62,32 @@ void addExpressionParameter() {
     addTreeNode(EXPRESSION_PARAMETER_NODE, 2);
 }
 
+void addFunctionParameter() {
+    addTreeNode(FUNCTION_PARAMETER_NODE, 1);
+}
+
 void addBlock() {
     addTreeNode(BLOCK_NODE, 5);
+}
+
+void addLabels() {
+    addTreeNode(LABELS_NODE, 1);
+}
+
+void addTypes() {
+    addTreeNode(TYPES_NODE, 1);
+}
+
+void addVariables() {
+    addTreeNode(VARIABLES_NODE, 1);
+}
+
+void addFunctions() {
+    addTreeNode(FUNCTIONS_NODE, 1);
+}
+
+void addBody() {
+    addTreeNode(BODY_NODE, 1);
 }
 
 void addTypeDeclaration() {

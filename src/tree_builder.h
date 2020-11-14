@@ -7,8 +7,14 @@ typedef enum {
 
     FUNCTION_HEADER_NODE,
     EXPRESSION_PARAMETER_NODE,
+    FUNCTION_PARAMETER_NODE,
 
     BLOCK_NODE,
+    LABELS_NODE,
+    TYPES_NODE,
+    VARIABLES_NODE,
+    FUNCTIONS_NODE,
+    BODY_NODE,
 
     TYPE_DECLARATION_NODE,
     DECLARATION_NODE,
@@ -69,8 +75,14 @@ void addFunction();
 
 void addFunctionHeader();
 void addExpressionParameter();
+void addFunctionParameter();
 
 void addBlock();
+void addLabels();
+void addTypes();
+void addVariables();
+void addFunctions();
+void addBody();
 
 void addTypeDeclaration();
 void addDeclaration();
