@@ -90,8 +90,8 @@ formal_parameter_list       : formal_parameter
 formal_parameter            : expression_parameter
                             | function_parameter
                             ;
-expression_parameter        : VAR identifier_list COLON identifier { addExpressionParameter(); }
-                            | identifier_list COLON identifier { addExpressionParameter(); }
+expression_parameter        : VAR identifier_list COLON identifier { addExpressionParameterByReference(); }
+                            | identifier_list COLON identifier { addExpressionParameterByValue(); }
                             ;
 function_parameter          : function_header { addFunctionParameter(); }
                             ;

@@ -50,8 +50,12 @@ const char *getCategoryName(NodeCategory category) {
 
         case FUNCTION_HEADER_NODE:
             return "FUNCTION_HEADER";
-        case EXPRESSION_PARAMETER_NODE:
-            return "EXPRESSION_PARAMETER";
+        case EXPRESSION_PARAMETER_BY_REFERENCE_NODE:
+            return "EXPRESSION_PARAMETER_BY_REFERENCE";
+        case EXPRESSION_PARAMETER_BY_VALUE_NODE:
+            return "EXPRESSION_PARAMETER_BY_VALUE";
+        case FUNCTION_PARAMETER_NODE:
+            return "FUNCTION_PARAMETER";
 
         case BLOCK_NODE:
             return "BLOCK";

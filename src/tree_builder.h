@@ -6,7 +6,8 @@ typedef enum {
     FUNCTION_NODE = 1,
 
     FUNCTION_HEADER_NODE,
-    EXPRESSION_PARAMETER_NODE,
+    EXPRESSION_PARAMETER_BY_REFERENCE_NODE,
+    EXPRESSION_PARAMETER_BY_VALUE_NODE,
     FUNCTION_PARAMETER_NODE,
 
     BLOCK_NODE,
@@ -74,7 +75,8 @@ void addEmpty();
 void addFunction();
 
 void addFunctionHeader();
-void addExpressionParameter();
+void addExpressionParameterByReference();
+void addExpressionParameterByValue();
 void addFunctionParameter();
 
 void addBlock();

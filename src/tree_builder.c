@@ -58,8 +58,12 @@ void addFunctionHeader() {
     addTreeNode(FUNCTION_HEADER_NODE, 3);
 }
 
-void addExpressionParameter() {
-    addTreeNode(EXPRESSION_PARAMETER_NODE, 2);
+void addExpressionParameterByReference() {
+    addTreeNode(EXPRESSION_PARAMETER_BY_REFERENCE_NODE, 2);
+}
+
+void addExpressionParameterByValue() {
+    addTreeNode(EXPRESSION_PARAMETER_BY_VALUE_NODE, 2);
 }
 
 void addFunctionParameter() {
