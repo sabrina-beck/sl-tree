@@ -2,17 +2,13 @@
 
 #include <stdlib.h>
 
-StackNode* newStackNode(void* data, StackNode* next) {
-    StackNode* newNode = malloc(sizeof(StackNode));
-    newNode->data = data;
-    newNode->next = next;
-    return newNode;
-}
+/* Auxiliary functions for memory allocation and deallocation of the stack nodes */
+StackNode* newStackNode(void* data, StackNode* next);
+void freeStackNode(StackNode* node);
 
-void freeStackNode(StackNode* node) {
-    free(node);
-}
-
+/**
+ * Public definitions implementation
+ **/
 Stack* newStack() {
     Stack* stack = malloc(sizeof(Stack));
     stack->size = 0;
@@ -35,4 +31,18 @@ void* pop(Stack* stack){
     freeStackNode(poppedNode);
 
     return data;
+}
+
+/**
+ * Private definitions implementation
+ **/
+StackNode* newStackNode(void* data, StackNode* next) {
+    StackNode* newNode = malloc(sizeof(StackNode));
+    newNode->data = data;
+    newNode->next = next;
+    return newNode;
+}
+
+void freeStackNode(StackNode* node) {
+    free(node);
 }

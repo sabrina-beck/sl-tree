@@ -1,3 +1,7 @@
+/**
+ * This module provides functionality to use a stack as data structure
+ **/
+
 typedef struct _stackNode {
     void* data;
     struct _stackNode* next;

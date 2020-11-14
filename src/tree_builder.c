@@ -8,14 +8,27 @@
  **/
 Stack *stack = NULL;
 
+/**
+ * Initializes a tree node considering that the "numberOfChildNodes" top elements on the stack
+ * are the subtrees of the new node.
+ **/
 void addTreeNodeWithName(NodeCategory category, int numberOfChildNodes, char *name);
 void addTreeNode(NodeCategory category, int numberOfChildNodes);
+
+/**
+ * Always use this method to get the stack, it will ensure that the stack is initialized
+ **/
 Stack *getStack();
 
 /**
  * Public functions implementation
  **/
 
+/**
+ * The syntax tree will be on top of the stack at the end of the parsing phase
+ * This function should be called only after the parser has finished
+ * If there is more than one element on the stack, this function will terminate the program with error
+ **/
 TreeNodePtr getSyntaxTree() {
     Stack *stack = getStack();
 
@@ -31,6 +44,10 @@ TreeNodePtr getSyntaxTree() {
     return syntaxTree;
 }
 
+/**
+ * A sequence is defined by the "next" attribute in a tree node, each subtree can have another subtree in its sequence
+ * this is used by sequence of statements, sequence of identifiers, etc.
+ **/
 void addSequence() {
     Stack *stack = getStack();
 
@@ -114,6 +131,12 @@ void addStatement() {
     addTreeNode(STATEMENT_NODE, 2);
 }
 
+/**
+ * Changing the grammar to add an empty node before an unlabeled statement cause the parser to always consider
+ * that a statement will have a label.
+ * Therefore, this function will add the empty node for the nonexistent label before the unlabeled statement
+ * so the construction of a Statement subtree works fine with two subtrees.
+ **/
 void addUnlabeledStatement() {
     Stack *stack = getStack();
     void *topNode = pop(stack);

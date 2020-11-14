@@ -1,3 +1,7 @@
+/**
+ * Tree internal structure definitions and construction facilities
+ **/
+
 #include "stack.h"
 
 #define MAX_CHILD_NODES 5
@@ -71,7 +75,7 @@ typedef struct _treeNode {
 TreeNodePtr getSyntaxTree();
 
 /**
- * Tree generation
+ * Tree generation functions used by the parser
  **/
 void addSequence();
 
