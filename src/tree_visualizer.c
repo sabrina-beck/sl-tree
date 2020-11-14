@@ -104,12 +104,6 @@ const char *getCategoryName(NodeCategory category) {
 
         case EXPRESSION_NODE:
             return "EXPRESSION";
-        case BOOLEAN_EXPRESSION_NODE:
-            return "BOOLEAN_EXPRESSION";
-        case BINARY_EXPRESSION_NODE:
-            return "BINARY_EXPRESSION";
-        case UNARY_EXPRESSION_NODE:
-            return "UNARY_OPERATOR_EXPRESSION";
         case TERM_NODE:
             return "TERM";
         case FACTOR_NODE:

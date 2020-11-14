@@ -150,7 +150,7 @@ type                        : identifier array_size_declaration_list { addType()
 array_size_declaration_list : { addEmpty(); }
                             | array_size_declaration array_size_declaration_list { addSequence(); }
                             ;
-array_size_declaration      : OPEN_BRACKET integer CLOSE_BRACKET
+array_size_declaration      : OPEN_BRACKET integer CLOSE_BRACKET { addArraySize(); }
                             ;
 
 
@@ -181,7 +181,7 @@ variable                    : identifier array_index_list { addVariable(); }
 array_index_list            : { addEmpty(); }
                             | array_index array_index_list { addSequence(); }
                             ;
-array_index                 : OPEN_BRACKET expression CLOSE_BRACKET
+array_index                 : OPEN_BRACKET expression CLOSE_BRACKET { addArrayIndex(); }
                             ;
 
 function_call_statement     : function_call SEMI_COLON
@@ -206,7 +206,7 @@ conditional                 : IF OPEN_PAREN expression CLOSE_PAREN compound { ad
 repetitive                  : WHILE OPEN_PAREN expression CLOSE_PAREN compound { addWhile(); }
                             ;
 
-compound                    : OPEN_BRACE unlabeled_statement_list CLOSE_BRACE
+compound                    : OPEN_BRACE unlabeled_statement_list CLOSE_BRACE { addCompound(); }
                             ;
 unlabeled_statement_list    : { addEmpty(); }
                             | unlabeled_statement unlabeled_statement_list { addSequence(); }
@@ -214,20 +214,23 @@ unlabeled_statement_list    : { addEmpty(); }
 
 empty_statement             : SEMI_COLON { addEmpty(); }
 
-expression                  : term
-                            | unop_expression
-                            | binary_expression
-                            | boolean_expression
+expression                  : binaryop_expression { addEmpty(); addEmpty(); addExpression(); }
+                            | binaryop_expression relational_operator binaryop_expression { addExpression(); }
+                            | unop_expression { addEmpty(); addEmpty(); addExpression(); }
+                            | unop_expression relational_operator binaryop_expression { addExpression(); }
                             ;
-boolean_expression          : expression relational_operator expression  { addBooleanExpression(); }
+binaryop_expression         : term additive_operation { addBinaryOperatorExpression(); }
                             ;
-binary_expression           : term additive_operator term  { addBinaryExpression(); }
+unop_expression             : unary_operator term additive_operation { addUnaryOperatorExpression(); }
                             ;
-unop_expression             : unary_operator expression { addUnaryExpression(); }
+additive_operation          : { addEmpty(); }
+                            | additive_operator term additive_operation { addAdditiveOperation(); }
                             ;
 
-term                        : term multiplicative_operator term { addTerm(); }
-                            | factor { addEmpty(); addEmpty(); addTerm(); }
+term                        : factor multiplicative_operation { addTerm(); }
+                            ;
+multiplicative_operation    : { addEmpty(); }
+                            | multiplicative_operator factor multiplicative_operation { addMultiplicativeOperation(); }
                             ;
 
 factor                      : variable { addFactor(); }

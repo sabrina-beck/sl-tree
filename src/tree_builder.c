@@ -106,6 +106,10 @@ void addType() {
     addTreeNode(TYPE_NODE, 2);
 }
 
+void addArraySize() {
+    addTreeNode(ARRAY_SIZE_NODE, 1);
+}
+
 void addStatement() {
     addTreeNode(STATEMENT_NODE, 2);
 }
@@ -130,6 +134,10 @@ void addVariable() {
     addTreeNode(VARIABLE_NODE, 2);
 }
 
+void addArrayIndex() {
+    addTreeNode(ARRAY_INDEX_NODE, 1);
+}
+
 void addFunctionCall() {
     addTreeNode(FUNCTION_CALL_NODE, 2);
 }
@@ -150,24 +158,32 @@ void addWhile() {
     addTreeNode(WHILE_NODE, 2);
 }
 
+void addCompound() {
+    addTreeNode(COMPOUND_NODE, 1);
+}
+
 void addExpression() {
     addTreeNode(EXPRESSION_NODE, 3);
 }
 
-void addBinaryExpression() {
-    addTreeNode(BINARY_EXPRESSION_NODE, 3);
+void addBinaryOperatorExpression() {
+    addTreeNode(BINARY_OPERATOR_EXPRESSION_NODE, 2);
 }
 
-void addBooleanExpression() {
-    addTreeNode(BOOLEAN_EXPRESSION_NODE, 3);
+void addUnaryOperatorExpression() {
+    addTreeNode(UNARY_OPERATOR_EXPRESSION_NODE, 3);
 }
 
-void addUnaryExpression() {
-    addTreeNode(UNARY_EXPRESSION_NODE, 2);
+void addAdditiveOperation() {
+    addTreeNode(ADDITIVE_OPERATION_NODE, 3);
 }
 
 void addTerm() {
-    addTreeNode(TERM_NODE, 3);
+    addTreeNode(TERM_NODE, 2);
+}
+
+void addMultiplicativeOperation() {
+    addTreeNode(MULTIPLICATIVE_OPERATION_NODE, 3);
 }
 
 void addFactor() {

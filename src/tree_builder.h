@@ -20,12 +20,14 @@ typedef enum {
     TYPE_DECLARATION_NODE,
     DECLARATION_NODE,
     TYPE_NODE,
+    ARRAY_SIZE_NODE,
 
     STATEMENT_NODE,
     LABEL_NODE,
 
     ASSIGNMENT_NODE,
     VARIABLE_NODE,
+    ARRAY_INDEX_NODE,
 
     FUNCTION_CALL_NODE,
 
@@ -37,11 +39,14 @@ typedef enum {
 
     WHILE_NODE,
 
+    COMPOUND_NODE,
+
     EXPRESSION_NODE,
-    BOOLEAN_EXPRESSION_NODE,
-    BINARY_EXPRESSION_NODE,
-    UNARY_EXPRESSION_NODE,
+    BINARY_OPERATOR_EXPRESSION_NODE,
+    UNARY_OPERATOR_EXPRESSION_NODE,
+    ADDITIVE_OPERATION_NODE,
     TERM_NODE,
+    MULTIPLICATIVE_OPERATION_NODE,
     FACTOR_NODE,
 
     INTEGER_NODE,
@@ -92,6 +97,7 @@ void addDeclaration();
 void addIdentifier(char *tokenValue);
 
 void addType();
+void addArraySize();
 
 void addStatement();
 void addUnlabeledStatement();
@@ -101,6 +107,7 @@ void addLabel();
 void addAssignment();
 
 void addVariable();
+void addArrayIndex();
 
 void addFunctionCall();
 
@@ -109,11 +116,14 @@ void addReturn();
 void addIf();
 void addWhile();
 
+void addCompound();
+
 void addExpression();
-void addBooleanExpression();
-void addBinaryExpression();
-void addUnaryExpression();
+void addBinaryOperatorExpression();
+void addUnaryOperatorExpression();
+void addAdditiveOperation();
 void addTerm();
+void addMultiplicativeOperation();
 void addFactor();
 
 void addInteger(char *tokenValue);
