@@ -63,7 +63,7 @@ void addTreeNodeWithName(NodeCategory category, int numberOfChildNodes, char *na
 
     Stack *stack = getStack();
 
-    for (int i = 0; i < numberOfChildNodes; i++) {
+    for (int i = numberOfChildNodes-1; i >= 0; i--) {
         TreeNodePtr childNode = pop(stack);
         node->subtrees[i] = childNode;
     }
