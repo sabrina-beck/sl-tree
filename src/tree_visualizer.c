@@ -93,8 +93,8 @@ const char *getCategoryName(NodeCategory category) {
 
         case ASSIGNMENT_NODE:
             return "ASSIGNMENT_NODE";
-        case VARIABLE_NODE:
-            return "VARIABLE_NODE";
+        case VALUE_NODE:
+            return "VALUE_NODE";
         case ARRAY_INDEX_NODE:
             return "ARRAY_INDEX_NODE";
 
@@ -138,11 +138,39 @@ const char *getCategoryName(NodeCategory category) {
 
         case RELATIONAL_OPERATOR_NODE:
             return "RELATIONAL_OPERATOR_NODE";
+        case LESS_OR_EQUAL_NODE:
+            return "LESS_OR_EQUAL_NODE";
+        case LESS_NODE:
+            return "LESS_NODE";
+        case EQUAL_NODE:
+            return "EQUAL_NODE";
+        case DIFFERENT_NODE:
+            return "DIFFERENT_NODE";
+        case GREATER_OR_EQUAL_NODE:
+            return "GREATER_OR_EQUAL_NODE";
+        case GREATER_NODE:
+            return "GREATER_NODE";
+
         case ADDITIVE_OPERATOR_NODE:
             return "ADDITIVE_OPERATOR_NODE";
         case UNARY_OPERATOR_NODE:
             return "UNARY_OPERATOR_NODE";
+        case PLUS_NODE:
+            return "PLUS_NODE";
+        case MINUS_NODE:
+            return "MINUS_NODE";
+        case OR_NODE:
+            return "OR_NODE";
+        case NOT_NODE:
+            return "NOT_NODE";
+
         case MULTIPLICATIVE_OPERATOR_NODE:
             return "MULTIPLICATIVE_OPERATOR_NODE";
+        case MULTIPLY_NODE:
+            return "MULTIPLY_NODE";
+        case DIV_NODE:
+            return "DIV_NODE";
+        case AND_NODE:
+            return "AND_NODE";
     }
 }
